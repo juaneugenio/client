@@ -5,3 +5,7 @@
 	box-sizing: border-box;
 	font-size: 17px;
 }
+.link-style {
+	text-decoration: none;
+	color: inherit;
+}

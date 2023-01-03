@@ -14,7 +14,10 @@
 .postInfo {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	align-items: center;
+	text-align: center;
+	padding: 0 0.2rem;
 }
 .postCat {
 	font-family: "Varela Round", Arial, Helvetica, sans-serif;
@@ -30,9 +33,11 @@
 	font-family: "Josefin Sans", Arial, Helvetica, sans-serif;
 	font-size: 1.2rem;
 	font-weight: 900;
-	margin-top: 0.8rem;
-	cursor: pointer;
 	color: #1b4769;
+	/* padding: 0 9rem; */
+}
+.postTitle::first-letter {
+	text-transform: capitalize;
 }
 .postDate {
 	font-family: "Lora", serif;
@@ -55,6 +60,7 @@
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
 }
+
 hr {
 	margin-top: 0.4rem;
 	width: 50%;

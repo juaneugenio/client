@@ -1,28 +1,34 @@
 /** @format */
+import { Link } from "react-router-dom";
 import "./postcard.css";
-const PostCard = () => {
+const PostCard = ({ post }) => {
 	return (
 		<div className="postCard">
-			<img
-				className="postImg"
-				src="https://cdn.shopify.com/s/files/1/0047/9730/0847/products/nurserylive-g-plant-money-plant-scindapsus-green-plant-in-4.5-inch-11-cm-ronda-no-1110-round-plastic-turquoise-plant_600x600.jpg?v=1637075960"
-				alt=""
-			/>
+			<Link to={`/blog/${post._id}`}>
+				<img
+					className="postImg"
+					src={
+						post.imageUrl
+							? post.imageUrl
+							: "https://friendlystock.com/wp-content/uploads/2020/12/3-kawaii-indoor-plant-cartoon-clipart.jpg"
+					}
+					alt={`Picture of ${post.title} `}
+				/>
+			</Link>
 			<div className="postInfo">
 				<div className="postCategories">
 					<span className="postCat">Indoor</span>
 					<span className="postCat">Outdoor</span>
 				</div>
-				<span className="postTitle">Girasol americano</span>
+				<Link to={`/blog/${post._id}`} className="link-style">
+					<p className="postTitle">{post.title}</p>
+				</Link>
 				<hr />
-				<span className="postDate">1 hour ago</span>
+				<span className="postDate">{new Date(post.time).toDateString()}</span>
 			</div>
-			<p className="postDesc">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Est maxime explicabo accusantium tenetur deserunt
-				voluptatem doloribus odit eum molestias. Blanditiis perspiciatis quisquam nemo atque ipsam laborum enim
-				consectetur voluptatum mollitia? voluptatem doloribus odit eum molestias. Blanditiis perspiciatis quisquam nemo
-				atque ipsam laborum enim consectetur voluptatum mollitia?
-			</p>
+			<Link to={`/blog/${post._id}`} className="link-style">
+				<p className="postDesc">{post.description}</p>
+			</Link>
 		</div>
 	);
 };
