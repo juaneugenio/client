@@ -4,7 +4,7 @@ import "./navbar.css";
 import * as PATH from "../../utils/paths";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user, logginOUT }) => {
 	// const user = false;
 
 	return (
@@ -28,20 +28,27 @@ const Navbar = ({ user }) => {
 					<Link to={PATH.TO__BLOG_CREATE_PAGE} className="linksCenter">
 						CREATE
 					</Link>
-					<Link to="#" className="linksCenter">
-						{user && "LOGOUT"}
-					</Link>
+					<i className=" searchIcon material-symbols-outlined">search</i>
 				</ul>
 			</div>
 			<div className="topRight">
 				{user ? (
-					<Link to={PATH.TO__USER_PROFILE_PAGE}>
-						<img
-							src="https://cdn.dribbble.com/users/1577045/screenshots/4914645/media/5146d1dbf9146c4d12a7249e72065a58.png"
-							alt="Photo Profile"
-							className="profileImg"
-						/>
-					</Link>
+					<>
+						<Link to="#" className="linksCenter" onClick={logginOUT}>
+							{user && "LOGOUT"}
+						</Link>
+						<Link to={PATH.TO__USER_PROFILE_PAGE}>
+							<img
+								src={
+									user.profileImage
+										? user.profileImage
+										: "https://imgs.search.brave.com/HAltpxU-sFVODYlpzIneugquzb8EAWr4WmbK6DVZnw4/rs:fit:512:512:1/g:ce/aHR0cHM6Ly9pczIt/c3NsLm16c3RhdGlj/LmNvbS9pbWFnZS90/aHVtYi9QdXJwbGUx/MjMvdjQvZjgvNDMv/ZDAvZjg0M2QwNWMt/MWIxZi04NGY4LWEz/YmQtY2E5YmFjZjA0/MzYzL3NvdXJjZS81/MTJ4NTEyYmIuanBn"
+								}
+								alt="Photo Profile"
+								className="profileImg"
+							/>
+						</Link>
+					</>
 				) : (
 					<>
 						<Link to={PATH.TO__LOGIN_PAGE} className="linksCenter">
@@ -53,7 +60,6 @@ const Navbar = ({ user }) => {
 						</Link>
 					</>
 				)}
-				<i className=" searchIcon material-symbols-outlined">search</i>
 			</div>
 		</nav>
 	);

@@ -12,7 +12,7 @@ const routes = (props) => {
 	return [
 		{
 			path: PATH.TO__HOME_PAGE,
-			element: <Home />,
+			element: <Home {...props} />,
 		},
 		{
 			path: PATH.TO__LOGIN_PAGE,
@@ -29,11 +29,11 @@ const routes = (props) => {
 
 		{
 			path: PATH.TO__BLOG_SINGLE_PAGE,
-			element: <SinglePage />,
+			element: <SinglePage {...props} />,
 		},
 		{
 			path: PATH.TO__USER_PROFILE_PAGE,
-			element: user ? <Settings /> : <RegisterPage />,
+			element: user ? <Settings {...props} /> : <RegisterPage />,
 		},
 		{
 			path: "*",

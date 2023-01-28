@@ -5,7 +5,7 @@ import * as USER_HELPERS from "../utils/userToken";
 
 // here we are just making our code look more DRY. With every backend call we must deal with errors and success states. The idea of creating these kinds of services is to make our lives easier in the components
 function internalServerError(err) {
-	console.log("%c err ▶︎ ", "font-size:13px; background:#993441; color:#ffb8b1;", err);
+	console.log("%c err ▶︎ ", "font-size:13px; background:#993441; color:#ffb8b1;", err.message, err);
 	if (err.response && err.response.data && err.response.data.errorMessage) {
 		return {
 			status: false,
@@ -35,11 +35,11 @@ export function login(credentials) {
 	return authService.post("/login", credentials).then(successStatus).catch(internalServerError);
 }
 
-export function getLoggedIn() {
+export function getLoggedIn(accessToken) {
 	return authService
-		.get(`session`, {
+		.get("/session", {
 			headers: {
-				Authorization: USER_HELPERS.getUserToken(),
+				authorization: USER_HELPERS.getUserToken(accessToken),
 			},
 		})
 		.then(successStatus)
@@ -49,17 +49,12 @@ export function getLoggedIn() {
 export function signup(credentials) {
 	return authService.post("/register", credentials).then(successStatus).catch(internalServerError);
 }
-// export function signup(credentials) {
-// 	return axios
-// 		.post("http://localhost:3000/api/auth/register", credentials)
-// 		.then(successStatus)
-// 		.catch(internalServerError);
-// }
+
 export function logout() {
 	return authService
 		.delete("/logout", {
 			headers: {
-				Authorization: USER_HELPERS.getUserToken(),
+				authorization: USER_HELPERS.getUserToken(),
 			},
 		})
 		.then(successStatus)
