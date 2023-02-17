@@ -1,54 +1,65 @@
 /** @format */
-import "./writeBlogPage.css";
-import { createPost } from "../../services/postServices";
+
+import axios from "axios";
+
+import { getSinglePost, editSinglePost } from "../../services/postServices";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import * as PATH from "../../utils/paths";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Loading from "../../components/loading/Loading";
 
-const initialFormData = {
-	imageUrl: "",
-	title: "",
-	description: "",
-};
-
-const WriteBlogPage = () => {
-	const navigate = useNavigate();
-	const [formData, setFormData] = useState(initialFormData);
+const EditSinglePost = () => {
+	const { blogId } = useParams();
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
+	const [singlePost, setSinglePost] = useState({});
+	const { title, imageUrl, description } = singlePost;
 	const [blogPicture, setBlogPicture] = useState("");
-	const { imageUrl, title, description } = formData;
 
+	const navigate = useNavigate();
+	// const [formData, setFormData] = useState({ singlePost });
+
+	useEffect(() => {
+		setIsLoading(true);
+		getSinglePost(blogId)
+			.then((response) => {
+				setSinglePost(response.data.getSinglePost);
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				console.log("%c ▶︎▶︎ -23-「SinglePost」", "font-size:13px; background:#993441; color:#ffb8b1;", error.message);
+				setError(error.message);
+			});
+	}, []);
+
+	//Picture Input change
 	const handlePictureChange = (event) => {
 		// console.log(event.target.files[0]);
 		setBlogPicture(event.target.files[0]);
 	};
 
-	//Handling text Form inputs
-	const handleTextChange = (event) => {
-		const { name, value } = event.target;
-		setFormData({ ...formData, [name]: value });
+	const handleTextChange = (e) => {
+		const { name, value } = e.target;
+		setSinglePost({ ...singlePost, [name]: value });
 	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setIsLoading(true);
 		setError(false);
 
-		if (!blogPicture || !title || !description) {
-			setError("You must publish something!");
-			setIsLoading(false);
-			return;
-		}
+		// if (!title || !description) {
+		// 	setError("You must publish something!");
+		// 	setIsLoading(false);
+		// 	return;
+		// }
 		//Handling ImageUpload
-		const blogPost = new FormData();
-		blogPost.append("blogPicture", blogPicture);
-		// blogPost.append("formData", formData);
-		blogPost.append("title", title);
-		blogPost.append("description", description);
+		const updatedPost = new FormData();
+		updatedPost.append("blogPicture", blogPicture);
+		updatedPost.append("title", title);
+		updatedPost.append("imageUrl", imageUrl);
+		updatedPost.append("description", description);
 		// console.log("BLOGPOST", blogPost);
 
-		createPost(blogPost)
+		editSinglePost(blogId, updatedPost)
 			.then((response) => {
 				if (!response.succes) {
 					return setError(response.data);
@@ -60,13 +71,11 @@ const WriteBlogPage = () => {
 				navigate(PATH.TO__HOME_PAGE);
 			});
 	};
-	if (isLoading) {
-		return <Loading />;
-	}
+
 	return (
 		<div className="writePage">
 			{error && <p>{error}</p>}
-			<img className="imgUploaded" src={imageUrl} alt={blogPicture.name ? blogPicture.name : "Upload an Image"} />
+			<img className="imgUploaded" src={imageUrl} alt={`${title}'s picture`} />
 			<form className="createForm" onSubmit={handleSubmit}>
 				<div className="formGroup1">
 					<label htmlFor="fileInput">
@@ -80,7 +89,7 @@ const WriteBlogPage = () => {
 						value={title}
 						type="text"
 						className="formTitle"
-						placeholder="Title"
+						// placeholder={title}
 						onChange={handleTextChange}
 						autoFocus={true}
 					/>
@@ -89,7 +98,7 @@ const WriteBlogPage = () => {
 						value={description}
 						type="text"
 						className="formDescription"
-						placeholder="Describe your Plant..."
+						// placeholder={description}
 						rows="20"
 						cols="20"
 						onChange={handleTextChange}
@@ -103,4 +112,4 @@ const WriteBlogPage = () => {
 	);
 };
 
-export default WriteBlogPage;
+export default EditSinglePost;
